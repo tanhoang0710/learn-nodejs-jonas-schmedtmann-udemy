@@ -54,7 +54,28 @@ const getDogPic = async () => {
         console.log('Random dog image saved to file');
     } catch (err) {
         console.log(err);
+        throw err;
     }
+
+    return '2: READY'; // async function return 1 promise ve return cua async function chinh la data cua resolve(data cau promise do)
+    // muon co reject(err) thi can throw trong try catch
 };
 
-getDogPic();
+// console.log('1: Will get dog pics!');
+// getDogPic()
+//     .then((x) => {
+//         console.log(x);
+//         console.log('3: Done getting dog pics!');
+//     })
+//     .catch((err) => console.log('ERROR'));
+
+(async () => {
+    try {
+        console.log('1: Will get dog pics!');
+        const x = await getDogPic();
+        console.log(x);
+        console.log('3: Done getting dog pics!');
+    } catch (error) {
+        console.log('ERROR');
+    }
+})();
