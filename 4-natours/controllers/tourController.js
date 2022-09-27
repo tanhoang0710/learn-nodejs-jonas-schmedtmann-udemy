@@ -41,6 +41,7 @@ exports.getTour = (req, res) => {
     // console.log(req.params);
 
     const id = req.params.id * 1;
+    // eslint-disable-next-line no-shadow
     const tour = tours.find((tour) => tour.id === id);
 
     res.status(200).json({
@@ -55,13 +56,15 @@ exports.createTour = (req, res) => {
     // console.log(req.body);
 
     const newId = tours[tours.length - 1].id + 1;
-    const newTour = Object.assign({ id: newId }, req.body);
+    // eslint-disable-next-line node/no-unsupported-features/es-syntax
+    const newTour = { ...req.body, id: newId };
 
     tours.push(newTour);
 
     fs.writeFile(
         `${__dirname}/dev-data/data/tours-simple.json`,
         JSON.stringify(tours),
+        // eslint-disable-next-line no-unused-vars
         (err) => {
             res.status(201).json({
                 status: 'success',
