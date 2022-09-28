@@ -11,3 +11,7 @@
 ## 4. Send data as JSON(usually)
 
 ## 5. Be stateless
+
+### Collections = Tables
+
+### Documents = Rows
