@@ -17,6 +17,7 @@ mongoose
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
+        useUnifiedTopology: true,
     })
     .then(() => {
         console.log('DB connection successful!');
@@ -25,7 +26,7 @@ mongoose
 const tourSchema = new mongoose.Schema({
     name: {
         type: String,
-        require: [true, 'A tour must have a name'],
+        required: [true, 'A tour must have a name'],
         unique: true,
     },
     rating: {
@@ -34,11 +35,24 @@ const tourSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        require: [true, 'A tour must have a price'],
+        required: [true, 'A tour must have a price'],
     },
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
+
+const testTour = new Tour({
+    name: 'The Park Camper',
+});
+
+testTour
+    .save()
+    .then((doc) => {
+        console.log(doc);
+    })
+    .catch((err) => {
+        console.log('Error: ', err);
+    });
 
 // 4) Start server
 const port = process.env.PORT || 3000;
