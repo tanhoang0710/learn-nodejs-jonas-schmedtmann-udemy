@@ -154,3 +154,119 @@ exports.deleteTour = async (req, res) => {
         });
     }
 };
+
+exports.getTourStats = async (req, res) => {
+    try {
+        const stats = await Tour.aggregate([
+            {
+                $match: {
+                    ratingsAverage: {
+                        $gte: 4.5,
+                    },
+                },
+            }, // lay ra nhung tour co danh gia >= 4.5
+            // roi nhom theo ID
+
+            // ko group by
+            // {
+            //     $group: {
+            //         _id: null,
+            //         num: {
+            //             $sum: 1,
+            //         }, // moi tour di qua pipeline nay se tang num len 1
+            //         numRatings: {
+            //             $sum: '$ratingsQuantity',
+            //         },
+            //         avgRating: {
+            //             $avg: '$ratingsAverage',
+            //         },
+            //         avgPrice: {
+            //             $avg: '$price',
+            //         },
+            //         minPrice: {
+            //             $min: '$price',
+            //         },
+            //         maxPrice: {
+            //             $max: '$price',
+            //         },
+            //     },
+            // },
+
+            // group by difficulty
+            {
+                $group: {
+                    _id: { $toUpper: '$difficulty' },
+                    num: {
+                        $sum: 1,
+                    }, // moi tour di qua pipeline nay se tang num len 1
+                    numRatings: {
+                        $sum: '$ratingsQuantity',
+                    },
+                    avgRating: {
+                        $avg: '$ratingsAverage',
+                    },
+                    avgPrice: {
+                        $avg: '$price',
+                    },
+                    minPrice: {
+                        $min: '$price',
+                    },
+                    maxPrice: {
+                        $max: '$price',
+                    },
+                },
+            },
+
+            // group theo ratingsAvergae
+            // {
+            //     $group: {
+            //         _id: '$ratingsAverage',
+            //         num: {
+            //             $sum: 1,
+            //         }, // moi tour di qua pipeline nay se tang num len 1
+            //         numRatings: {
+            //             $sum: '$ratingsQuantity',
+            //         },
+            //         avgRating: {
+            //             $avg: '$ratingsAverage',
+            //         },
+            //         avgPrice: {
+            //             $avg: '$price',
+            //         },
+            //         minPrice: {
+            //             $min: '$price',
+            //         },
+            //         maxPrice: {
+            //             $max: '$price',
+            //         },
+            //     },
+            // },
+
+            // sort theo field moi'
+            {
+                $sort: {
+                    avgPrice: 1, // 1 for ascending
+                },
+            },
+
+            // match lan nua chi lay document co difficuly khac EASY
+            {
+                $match: {
+                    _id: {
+                        $ne: 'EASY',
+                    },
+                },
+            },
+        ]);
+
+        res.status(200).json({
+            status: 'success',
+            data: stats,
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: 'fail',
+            message: error,
+        });
+    }
+};
