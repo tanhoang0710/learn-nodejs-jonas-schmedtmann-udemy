@@ -160,7 +160,7 @@ exports.getTourStats = async (req, res) => {
         const stats = await Tour.aggregate([
             {
                 $match: {
-                    ratingsAverage: {
+                    ratingAverage: {
                         $gte: 4.5,
                     },
                 },
@@ -203,7 +203,7 @@ exports.getTourStats = async (req, res) => {
                         $sum: '$ratingsQuantity',
                     },
                     avgRating: {
-                        $avg: '$ratingsAverage',
+                        $avg: '$ratingAverage',
                     },
                     avgPrice: {
                         $avg: '$price',
@@ -217,10 +217,10 @@ exports.getTourStats = async (req, res) => {
                 },
             },
 
-            // group theo ratingsAvergae
+            // group theo ratingAverage
             // {
             //     $group: {
-            //         _id: '$ratingsAverage',
+            //         _id: '$ratingAverage',
             //         num: {
             //             $sum: 1,
             //         }, // moi tour di qua pipeline nay se tang num len 1
@@ -228,7 +228,7 @@ exports.getTourStats = async (req, res) => {
             //             $sum: '$ratingsQuantity',
             //         },
             //         avgRating: {
-            //             $avg: '$ratingsAverage',
+            //             $avg: '$ratingAverage',
             //         },
             //         avgPrice: {
             //             $avg: '$price',
