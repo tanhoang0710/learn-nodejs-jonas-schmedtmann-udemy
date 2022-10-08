@@ -250,13 +250,13 @@ exports.getTourStats = async (req, res) => {
             },
 
             // match lan nua chi lay document co difficuly khac EASY
-            {
-                $match: {
-                    _id: {
-                        $ne: 'EASY',
-                    },
-                },
-            },
+            // {
+            //     $match: {
+            //         _id: {
+            //             $ne: 'EASY',
+            //         },
+            //     },
+            // },
         ]);
 
         res.status(200).json({
