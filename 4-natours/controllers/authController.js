@@ -20,6 +20,10 @@ exports.signup = catchAsync(async (req, res, next) => {
     });
 
     const token = signToken(newUser._id);
+    console.log(
+        '🚀 ~ file: authController.js ~ line 23 ~ exports.signup=catchAsync ~ token',
+        token
+    );
 
     res.status(201).json({
         status: 'success',
