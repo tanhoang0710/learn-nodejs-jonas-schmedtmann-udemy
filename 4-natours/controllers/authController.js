@@ -20,10 +20,6 @@ exports.signup = catchAsync(async (req, res, next) => {
     });
 
     const token = signToken(newUser._id);
-    console.log(
-        '🚀 ~ file: authController.js ~ line 23 ~ exports.signup=catchAsync ~ token',
-        token
-    );
 
     res.status(201).json({
         status: 'success',
@@ -111,3 +107,18 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
     next();
 });
+
+exports.retrictTo =
+    (...roles) =>
+    (req, res, next) => {
+        //roles ['admin', 'lead-guide']
+        if (!roles.includes(req.user.role)) {
+            return next(
+                new AppError(
+                    'You do not have permission to perform this action',
+                    403
+                )
+            );
+        }
+        next();
+    };
