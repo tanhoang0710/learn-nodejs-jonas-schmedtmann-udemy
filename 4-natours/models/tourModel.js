@@ -117,7 +117,7 @@ const tourSchema = new mongoose.Schema(
         guides: [
             {
                 type: mongoose.Schema.ObjectId,
-                ref: 'User',
+                ref: 'user',
             },
         ],
     },
@@ -199,6 +199,14 @@ tourSchema.pre(/^find/, function (next) {
     });
 
     this.start = Date.now();
+    next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'guides',
+        select: '-__v -passwordChangeAt',
+    });
     next();
 });
 
