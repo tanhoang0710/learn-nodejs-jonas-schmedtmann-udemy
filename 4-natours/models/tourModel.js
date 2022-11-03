@@ -136,6 +136,13 @@ tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
 });
 
+// Virtual popolate
+tourSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'tour',
+    localField: '_id',
+});
+
 // Mongoose middleware
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
