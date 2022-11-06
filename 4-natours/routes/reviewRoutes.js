@@ -13,4 +13,6 @@ router
         reviewController.createReview
     ); // login user can review
 
+router.route('/:id').delete(reviewController.deleteReview);
+
 module.exports = router;
