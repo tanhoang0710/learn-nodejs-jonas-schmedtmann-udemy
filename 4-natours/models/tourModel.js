@@ -131,6 +131,10 @@ const tourSchema = new mongoose.Schema(
     }
 );
 
+// tourSchema.index({ price: 1 });
+tourSchema.index({ price: 1, ratingAverage: -1 });
+tourSchema.index({ slug: 1 });
+
 // dùng function thường vì trong trường hợp này cần this để trỏ đến từng document một
 tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
