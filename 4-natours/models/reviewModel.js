@@ -82,6 +82,8 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
     }
 };
 
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 reviewSchema.post('save', function () {
     // this points to current review
 
@@ -100,7 +102,8 @@ reviewSchema.pre(/^findOneAnd/, async function (next) {
 });
 
 reviewSchema.post(/^findOneAnd/, async function () {
-    // this.review = await this.findOne(); does NOT wo
+    // this.review = await this.findOne(); does NOT work because the query has already executed
+    // cần dùng post vì cần tính toán lại rating trung bình theo document đã được update
     await this.review.constructor.calcAverageRatings(this.review.tour);
 });
 
