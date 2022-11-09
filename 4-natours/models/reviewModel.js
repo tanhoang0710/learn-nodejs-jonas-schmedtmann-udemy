@@ -69,10 +69,17 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
 
     console.log(stats);
 
-    await Tour.findByIdAndUpdate(tourId, {
-        ratingQuantity: stats[0].nRating,
-        ratingAverage: stats[0].avgRating,
-    });
+    if (stats.length > 0) {
+        await Tour.findByIdAndUpdate(tourId, {
+            ratingQuantity: stats[0].nRating,
+            ratingAverage: stats[0].avgRating,
+        });
+    } else {
+        await Tour.findByIdAndUpdate(tourId, {
+            ratingQuantity: 0,
+            ratingAverage: 4.5,
+        });
+    }
 };
 
 reviewSchema.post('save', function () {
@@ -82,6 +89,19 @@ reviewSchema.post('save', function () {
     // dùng this.constructor để trỏ đến Model
     // ko để dưới hàm 87 được vì lúc đấy reviewSchema sẽ ko áp dụng hàm post
     this.constructor.calcAverageRatings(this.tour);
+});
+
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+    //this point to Query
+    this.review = await this.findOne(); // truyền sang cho post middleware
+    console.log(this.review);
+
+    next();
+});
+
+reviewSchema.post(/^findOneAnd/, async function () {
+    // this.review = await this.findOne(); does NOT wo
+    await this.review.constructor.calcAverageRatings(this.review.tour);
 });
 
 const Review = mongoose.model('Review', reviewSchema);
