@@ -101,7 +101,7 @@ app.all('*', (req, res, next) => {
     next(err);
 });
 
-// express tu biet day la error handling middleware
+// express tu biet day la error handling middleware, vi là middleware 4 tham số
 app.use(globalErrorHandler);
 
 module.exports = app;
