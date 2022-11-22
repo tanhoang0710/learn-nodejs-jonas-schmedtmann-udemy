@@ -53,6 +53,7 @@ router
         tourController.createTour
     );
 
+// luu anh khi upload la luu ten anh vao db va anh xa no sang ten o tren o dia
 router
     .route('/:id')
     .get(tourController.getTour)
