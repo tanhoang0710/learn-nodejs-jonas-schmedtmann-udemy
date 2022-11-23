@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
 const { convert } = require('html-to-text');
+const path = require('path');
 
 module.exports = class Email {
     constructor(user, url) {
@@ -29,7 +30,7 @@ module.exports = class Email {
     async send(template, subject) {
         // 1) Render HTML based on apug template
         const html = pug.renderFile(
-            `${__dirname}/../views/emails/${template.pug}`,
+            path.join(__dirname, `../views/email/${template}.pug`),
             {
                 firstName: this.firstName,
                 url: this.url,
@@ -51,6 +52,6 @@ module.exports = class Email {
     }
 
     async sendWelcome() {
-        await this.send('Welcome', 'Welcome to the Natours Family');
+        await this.send('welcome', 'Welcome to the Natours Family');
     }
 };
