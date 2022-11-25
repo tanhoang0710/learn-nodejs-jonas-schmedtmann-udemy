@@ -1,4 +1,7 @@
+const Booking = require('../models/bookingModel');
 const Review = require('../models/reviewModel');
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
 // exports.getAllReviews = catchAsync(async (req, res, next) => {
@@ -35,6 +38,20 @@ exports.setTourUserIds = (req, res, next) => {
 //         },
 //     });
 // });
+
+exports.checkUserBookTour = catchAsync(async (req, res, next) => {
+    const { tour, user } = req.body;
+    const booking = await Booking.findOne({ tour, user });
+    console.log(
+        '🚀 ~ file: reviewController.js ~ line 44 ~ exports.checkUserBookTour=catchAsync ~ booking',
+        booking
+    );
+    if (!booking)
+        return next(
+            new AppError('You need to book this tour before review', 401)
+        );
+    next();
+});
 
 exports.createReview = factory.createOne(Review);
 exports.getAllReviews = factory.getAll(Review);
