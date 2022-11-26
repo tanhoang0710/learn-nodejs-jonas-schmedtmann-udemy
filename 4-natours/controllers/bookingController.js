@@ -57,6 +57,32 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
     res.redirect(req.originalUrl.split('?')[0]);
 });
 
+exports.getAllBookingsOnTour = catchAsync(async (req, res, next) => {
+    const bookings = await Booking.find({
+        tour: req.params.tourId,
+    });
+    res.status(200).json({
+        status: 'success',
+        results: bookings.length,
+        data: {
+            data: bookings,
+        },
+    });
+});
+
+exports.getAllBookingsOnUser = catchAsync(async (req, res, next) => {
+    const bookings = await Booking.find({
+        user: req.params.userId,
+    });
+    res.status(200).json({
+        status: 'success',
+        results: bookings.length,
+        data: {
+            data: bookings,
+        },
+    });
+});
+
 exports.createBooking = factory.createOne(Booking);
 exports.getBooking = factory.getOne(Booking);
 exports.getAllBookings = factory.getAll(Booking);
